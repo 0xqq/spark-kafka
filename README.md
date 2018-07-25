@@ -22,6 +22,7 @@
 * 修改 增加updateOffsets方法不用提供group id
 * 增加 更新偏移量至最新操作。updataOffsetToLastest
 * 修改，在kp里面设置spark.streaming.kafka.maxRatePerPartition。
+* 支持 topic新增分区数时的offset问题。（默认是从 0 开始 ）
 
 
   

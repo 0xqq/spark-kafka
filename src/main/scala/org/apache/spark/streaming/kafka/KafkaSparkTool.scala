@@ -94,11 +94,6 @@ private[spark] trait KafkaSparkTool extends SparkKafkaConfsKey {
    * @time 2018-04-04
    * @func 获取有效的offset
    */
-  /**
-   * @author LMQ
-   * @time 2018-04-04
-   * @func 获取有效的offset
-   */
   def getEffectiveOffset(
     kc:                KafkaCluster,
     kp:                Map[String, String],
@@ -220,26 +215,14 @@ private[spark] trait KafkaSparkTool extends SparkKafkaConfsKey {
     fromOffsets
   }
   /**
-   *
-   */
-  def findLeaders(kp: Map[String, String], topics: Set[TopicAndPartition]) = {
-    if (kc == null) {
-      kc = new KafkaCluster(kp)
-    }
-    kc.findLeaders(topics).fold(
-      errs => throw new SparkException(errs.mkString("\n")),
-      ok => ok)
-  }
-  /**
-   *
+   * @author LMQ
+   * @func 解决偶尔读不到kafka信息的情况
    */
   def latestLeaderOffsets(
     kp:             Map[String, String],
     retries:        Int,
     currentOffsets: Map[TopicAndPartition, Long]): Map[TopicAndPartition, LeaderOffset] = {
-    if (kc == null) {
-      kc = new KafkaCluster(kp)
-    }
+    instance(kp)
     val o = kc.getLatestLeaderOffsets(currentOffsets.keySet)
     // Either.fold would confuse @tailrec, do it manually
     if (o.isLeft) {
