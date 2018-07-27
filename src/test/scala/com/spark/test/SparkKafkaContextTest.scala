@@ -20,7 +20,7 @@ object SparkKafkaContextTest {
 
     
     val topics = Set("test")
-    val kafkadataRdd = skc.kafkaRDD[((String, Int, Long), String)](kp, topics, msgHandle2)
+    val kafkadataRdd = skc.kafkaRDD[String,String](kp, topics)
     
     //RDD.rddToPairRDDFunctions(kafkadataRdd)
     //kafkadataRdd.reduceByKey(_+_)
