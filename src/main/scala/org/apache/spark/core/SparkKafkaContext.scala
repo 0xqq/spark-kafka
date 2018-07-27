@@ -97,13 +97,12 @@ class SparkKafkaContext {
    * @param topics： topics
    * @param msgHandle：拉取哪些kafka数据
    */
-  def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def kafkaRDD[K: ClassTag, V: ClassTag](
     kp: Map[String, String],
-    topics: Set[String],
-    msgHandle: (MessageAndMetadata[K, V]) => R) = {
+    topics: Set[String]) = {
     SparkContextKafkaManager
-      .createKafkaRDD[K, V, KD, VD, R](
-        sparkcontext, kp, topics, null, msgHandle)
+      .createKafkaRDD[K, V](
+        sparkcontext, kp, topics, null)
   }
   /**
    * @author LMQ
@@ -116,7 +115,7 @@ class SparkKafkaContext {
     kp: Map[String, String],
     topics: Set[String]) = {
     SparkContextKafkaManager
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
+      .createKafkaRDD[String, String](
         sparkcontext, kp, topics, null)
   }
   /**
@@ -128,11 +127,10 @@ class SparkKafkaContext {
    */
   def kafkaRDD[R: ClassTag](
     kp: Map[String, String],
-    topics: Set[String],
-    msgHandle: (MessageAndMetadata[String, String]) => R) = {
+    topics: Set[String]) = {
     SparkContextKafkaManager
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, R](
-        sparkcontext, kp, topics, null, msgHandle)
+      .createKafkaRDD[String, String](
+        sparkcontext, kp, topics, null)
   }
   /**
    * @author LMQ
@@ -145,11 +143,10 @@ class SparkKafkaContext {
   def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
     kp: Map[String, String],
     topics: Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
-    msgHandle: (MessageAndMetadata[K, V]) => R) = {
+    fromOffset: Map[TopicAndPartition, Long]) = {
     SparkContextKafkaManager
-      .createKafkaRDD[K, V, KD, VD, R](
-        sparkcontext, kp, topics, fromOffset, msgHandle)
+      .createKafkaRDD[K, V](
+        sparkcontext, kp, topics, fromOffset)
   }
   /**
    * @author LMQ
@@ -163,7 +160,7 @@ class SparkKafkaContext {
     topics: Set[String],
     fromOffset: Map[TopicAndPartition, Long]) = {
     SparkContextKafkaManager
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
+      .createKafkaRDD[String, String](
         sparkcontext, kp, topics, fromOffset)
   }
   /**
@@ -174,14 +171,13 @@ class SparkKafkaContext {
    * @param maxMessagesPerPartition:每个分区最多拉取多少条
    * @attention 这里没有传 msgHandle 则使用默认的msgHandle （输出为Tuple2(topic,msg）
    */
-  def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def kafkaRDD[K: ClassTag, V: ClassTag](
     kp: Map[String, String],
     topics: Set[String],
-    maxMessagesPerPartition: Int,
-    msgHandle: (MessageAndMetadata[K, V]) => R) = {
+    maxMessagesPerPartition: Int) = {
     SparkContextKafkaManager
-      .createKafkaRDD2[K, V, KD, VD, R](
-        sparkcontext, kp, topics, null, maxMessagesPerPartition, msgHandle)
+      .createKafkaRDD2[K, V](
+        sparkcontext, kp, topics, null, maxMessagesPerPartition)
   }
   /**
    * @author LMQ
@@ -196,7 +192,7 @@ class SparkKafkaContext {
     topics: Set[String],
     maxMessagesPerPartition: Int) = {
     SparkContextKafkaManager
-      .createKafkaRDD2[String, String, StringDecoder, StringDecoder, (String, String)](
+      .createKafkaRDD2[String, String](
         sparkcontext, kp, topics, null, maxMessagesPerPartition)
   }
 }

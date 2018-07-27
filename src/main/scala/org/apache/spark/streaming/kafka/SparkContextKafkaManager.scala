@@ -37,12 +37,12 @@ private[spark] object SparkContextKafkaManager
    * @attention maxMessagesPerPartitionKEY：这个参数。是放在sparkconf里面，或者是kp里面。如果两个都没配置，那默认是没有限制，
    * 						这样可能会导致一次性读取的数据量过大。也可以使用另一个带有maxMessagesPerPartition参数的方法来读取
    */
-  def createKafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createKafkaRDD[K: ClassTag, V: ClassTag](
     sc:             SparkContext,
     kp:             Map[String, String],
     topics:         Set[String],
-    fromOffset:     Map[TopicAndPartition, Long],
-    messageHandler: MessageAndMetadata[K, V] => R = msgHandle) = {
+    fromOffset:     Map[TopicAndPartition, Long]
+    ) = {
     if (kp == null || !kp.contains(GROUP_ID))
       throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
     val groupId = kp.get(GROUP_ID).get
@@ -88,13 +88,12 @@ private[spark] object SparkContextKafkaManager
    * 				4：从自定义的offset开始  = CUSTOM
    * @param maxMessagesPerPartition ： 限制读取的kafka数据量（每个分区多少数据）
    */
-  def createKafkaRDD2[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createKafkaRDD2[K: ClassTag, V: ClassTag](
     sc:                      SparkContext,
     kp:                      Map[String, String],
     topics:                  Set[String],
     fromOffset:              Map[TopicAndPartition, Long],
-    maxMessagesPerPartition: Int,
-    messageHandler:          MessageAndMetadata[K, V] => R = msgHandle) = {
+    maxMessagesPerPartition: Int) = {
     if (kp == null || !kp.contains(GROUP_ID))
       throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
     instance(kp)
