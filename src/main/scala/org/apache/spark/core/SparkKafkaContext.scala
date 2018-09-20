@@ -25,6 +25,7 @@ class SparkKafkaContext() {
   lazy val conf = sparkcontext.getConf
   def this(kp: Map[String, String]) {
     this()
+    this.kp=kp
     val conf = new SparkConf()
     sparkcontext = new SparkContext(conf)
   }
