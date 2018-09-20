@@ -18,10 +18,16 @@ import org.apache.spark.streaming.kafka.SparkKafkaManager
  * @description 此类主要是用于 创建 kafkaRDD 。
  * @description 创建的kafkaRDD提供更新偏移量的能力
  */
-class SparkKafkaContext(var kp:Map[String,String]) {
+class SparkKafkaContext() {
+  var kp: Map[String, String] = null
   var sparkcontext: SparkContext = null
-  lazy val skm=new SparkKafkaManager(kp)
-  lazy val conf=sparkcontext.getConf
+  lazy val skm = new SparkKafkaManager(kp)
+  lazy val conf = sparkcontext.getConf
+  def this(kp: Map[String, String]) {
+    this()
+    val conf = new SparkConf()
+    sparkcontext = new SparkContext(conf)
+  }
   def this(kp:Map[String,String],sparkcontext: SparkContext) {
     this(kp)
     this.sparkcontext = sparkcontext
