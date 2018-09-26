@@ -3,7 +3,6 @@ import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.SparkException
 import kafka.message.MessageAndMetadata
 import kafka.common.TopicAndPartition
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import kafka.serializer.StringDecoder
 import kafka.common.TopicAndPartition
@@ -20,6 +19,7 @@ import org.apache.kafka.common.TopicPartition
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import java.{ util => ju }
+import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 
 
 private[spark] class SparkKafkaManager(override var kp: Map[String, String])

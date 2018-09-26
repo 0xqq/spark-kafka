@@ -2,7 +2,6 @@ package org.apache.spark.core
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
-import org.apache.spark.streaming.kafka.KafkaUtils
 import scala.reflect.ClassTag
 import kafka.message.MessageAndMetadata
 import kafka.serializer.Decoder
@@ -128,12 +127,11 @@ class SparkKafkaContext() {
    * @param topics： topics
    * @param msgHandle：拉取哪些kafka数据
    */
-  def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    topics:    Set[String],
-    msgHandle: (MessageAndMetadata[K, V]) => R) = {
+  def kafkaRDD[K: ClassTag, V: ClassTag](
+    topics:    Set[String]) = {
     skm
-      .createKafkaRDD[K, V, KD, VD, R](
-        this, topics, null, msgHandle)
+      .createKafkaRDD[K, V](
+        this, topics, null)
   }
   /**
    * @author LMQ
@@ -145,83 +143,8 @@ class SparkKafkaContext() {
   def kafkaRDD(
     topics: Set[String]) = {
     skm
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
+      .createKafkaRDD[String, String](
         this, topics, null)
-  }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   * @param msgHandle：拉取哪些kafka数据
-   */
-  def kafkaRDD[R: ClassTag](
-    topics:    Set[String],
-    msgHandle: (MessageAndMetadata[String, String]) => R) = {
-    skm
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, R](
-        this, topics, null, msgHandle)
-  }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   * @param fromOffset: 拉取数据的起始offset
-   * @param msgHandle：拉取哪些kafka数据
-   */
-  def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    topics:     Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
-    msgHandle:  (MessageAndMetadata[K, V]) => R) = {
-    skm
-      .createKafkaRDD[K, V, KD, VD, R](
-        this, topics, fromOffset, msgHandle)
-  }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   * @param fromOffset: 拉取数据的起始offset
-   */
-  def kafkaRDD(
-    topics:     Set[String],
-    fromOffset: Map[TopicAndPartition, Long]) = {
-    skm
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
-        this, topics, fromOffset)
-  }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   * @param maxMessagesPerPartition:每个分区最多拉取多少条
-   * @attention 这里没有传 msgHandle 则使用默认的msgHandle （输出为Tuple2(topic,msg）
-   */
-  def kafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    topics:                  Set[String],
-    maxMessagesPerPartition: Int,
-    msgHandle:               (MessageAndMetadata[K, V]) => R) = {
-    skm
-      .createKafkaRDD[K, V, KD, VD, R](
-        this, topics, null, maxMessagesPerPartition, msgHandle)
-  }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   * @param maxMessagesPerPartition:每个分区最多拉取多少条
-   * @attention 这里没有传 msgHandle 则使用默认的msgHandle （输出为Tuple2(topic,msg）
-   */
-  def kafkaRDD(
-    topics:                  Set[String],
-    maxMessagesPerPartition: Int) = {
-    skm
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
-        this, topics, null, maxMessagesPerPartition)
   }
 }
 object SparkKafkaContext extends SparkKafkaConfsKey {

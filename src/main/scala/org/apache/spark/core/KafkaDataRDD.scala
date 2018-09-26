@@ -8,7 +8,6 @@ import org.apache.spark.Partition
 import org.apache.spark.TaskContext
 import kafka.common.TopicAndPartition
 import kafka.message.MessageAndMetadata
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.streaming.kafka010.OffsetRange
 import org.apache.spark.streaming.kafka010.KafkaRDD
