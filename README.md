@@ -3,7 +3,7 @@
 **scala version 2.10** <br/>
 **spark version 1.6.0** <br/>
 **kafka version 0.8** <br/>
-
+**kafka 010 以上支持 SSL** <br/>
 
 * 提供 自定义的 StreamingKafkaContext创建 createDirectStream 的方法 ，用来读取kafka的数据。
 * 提供 自定义的 StreamingKafkaContext利用conf创建Dstream的方法
